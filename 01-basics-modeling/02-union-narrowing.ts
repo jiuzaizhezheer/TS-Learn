@@ -50,16 +50,8 @@ function assertNever(value: never): never {
 }
 
 function getPaymentSummary(payment: Payment): string {
-  switch (payment.kind) {
-    case "wechat":
-      return `微信支付：${payment.openId.slice(-4)}`;
-    case "alipay":
-      return `支付宝支付：${payment.account}`;
-    case "bank-card":
-      return `银行卡支付：${payment.bankName} ${payment.cardNo.slice(-4)}`;
-    default:
-      return assertNever(payment);
-  }
+  // TODO: 使用 switch payment.kind 实现题目 2
+  throw new Error(`TODO: ${payment.kind}`);
 }
 
 console.log("[02-union-narrowing] wechat:", getPaymentSummary({ kind: "wechat", openId: "wx_open_1234" }));

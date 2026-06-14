@@ -54,46 +54,27 @@ type AppNotification =
 type NotificationType = AppNotification["type"];
 
 function getNotificationTitle(notification: AppNotification): string {
-  switch (notification.type) {
-    case "system":
-      return notification.title;
-    case "order":
-      return `订单 ${notification.orderId} 状态更新：${notification.status}`;
-    case "approval":
-      return `${notification.applicantName} 的审批${notification.approved ? "已通过" : "待处理"}`;
-  }
+  // TODO: 实现题目 2
+  return "";
 }
 
 function markAsRead(
   list: AppNotification[],
   id: string,
 ): AppNotification[] {
-  return list.map((notification) =>
-    notification.id === id
-      ? {
-          ...notification,
-          read: true,
-        }
-      : notification,
-  );
+  // TODO: 实现题目 3
+  return list;
 }
 
 function groupUnreadCountByType(
   list: AppNotification[],
 ): Record<NotificationType, number> {
-  const counts: Record<NotificationType, number> = {
+  // TODO: 实现题目 4
+  return {
     system: 0,
     order: 0,
     approval: 0,
   };
-
-  for (const notification of list) {
-    if (!notification.read) {
-      counts[notification.type] += 1;
-    }
-  }
-
-  return counts;
 }
 
 const notifications: AppNotification[] = [

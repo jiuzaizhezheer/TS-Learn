@@ -42,39 +42,12 @@ type LoggerOptions = {
 type Logger = Record<LogLevel, (message: string) => void>;
 
 function createLogger(options?: Partial<LoggerOptions>): Logger {
-  const config: LoggerOptions = {
-    level: options?.level ?? "info",
-    timestamp: options?.timestamp ?? true,
-    ...(options?.prefix ? { prefix: options.prefix } : {}),
-  };
-
-  const levelWeight: Record<LogLevel, number> = {
-    debug: 10,
-    info: 20,
-    warn: 30,
-    error: 40,
-  };
-
-  const write = (level: LogLevel, message: string): void => {
-    if (levelWeight[level] < levelWeight[config.level]) {
-      return;
-    }
-
-    const parts = [
-      config.timestamp ? new Date().toISOString() : undefined,
-      `[${level.toUpperCase()}]`,
-      config.prefix ? `[${config.prefix}]` : undefined,
-      message,
-    ].filter((part): part is string => Boolean(part));
-
-    console.log(parts.join(" "));
-  };
-
+  // TODO: 实现题目 2 和题目 3
   return {
-    debug: (message) => write("debug", message),
-    info: (message) => write("info", message),
-    warn: (message) => write("warn", message),
-    error: (message) => write("error", message),
+    debug: () => undefined,
+    info: () => undefined,
+    warn: () => undefined,
+    error: () => undefined,
   };
 }
 

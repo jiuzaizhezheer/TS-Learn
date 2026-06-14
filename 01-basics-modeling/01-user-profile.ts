@@ -44,21 +44,13 @@ type UserProfile = {
 };
 
 function formatUserDisplayName(user: UserProfile): string {
-  const roleLabel: Record<UserRole, string> = {
-    admin: "管理员",
-    editor: "编辑",
-    viewer: "访客",
-  };
-
-  return `[${roleLabel[user.role]}] ${user.name}`;
+  // TODO: 在这里实现题目 2
+  throw new Error("TODO");
 }
 
 function maskContact(user: UserProfile): string {
-  if (!user.phone) {
-    return user.email;
-  }
-
-  return `${user.phone.slice(0, 3)}****${user.phone.slice(-4)}`;
+  // TODO: 在这里实现题目 3
+  throw new Error("TODO");
 }
 
 const demoUser: UserProfile = {

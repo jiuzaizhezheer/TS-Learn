@@ -38,41 +38,16 @@ async function withTimeout<T>(
   task: () => Promise<T>,
   timeoutMs: number,
 ): Promise<T> {
-  let timer: ReturnType<typeof setTimeout> | undefined;
-
-  try {
-    return await Promise.race([
-      task(),
-      new Promise<never>((_, reject) => {
-        timer = setTimeout(() => reject(new Error(`任务超时：${timeoutMs}ms`)), timeoutMs);
-      }),
-    ]);
-  } finally {
-    if (timer) {
-      clearTimeout(timer);
-    }
-  }
+  // TODO: 实现题目 2
+  throw new Error(`TODO: ${timeoutMs}`);
 }
 
 async function retry<T>(
   task: () => Promise<T>,
   options: RetryOptions,
 ): Promise<T> {
-  let lastError: unknown;
-
-  for (let attempt = 0; attempt <= options.retries; attempt += 1) {
-    try {
-      return await withTimeout(task, options.timeoutMs);
-    } catch (error) {
-      lastError = error;
-
-      if (attempt < options.retries) {
-        await sleep(options.delayMs);
-      }
-    }
-  }
-
-  throw lastError instanceof Error ? lastError : new Error("任务失败");
+  // TODO: 实现题目 3，可以使用 sleep
+  throw new Error(`TODO: ${options.retries}`);
 }
 
 let failedTimes = 0;

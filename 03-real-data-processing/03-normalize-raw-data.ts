@@ -50,31 +50,13 @@ type Employee = {
 };
 
 function normalizeEmployee(raw: RawEmployee): Employee | null {
-  const name = raw.name.trim();
-  const salary = Number(raw.salary);
-
-  if (!name || Number.isNaN(salary) || salary < 0) {
-    return null;
-  }
-
-  return {
-    id: String(raw.id),
-    name,
-    department: raw.department?.trim() || "未分配",
-    salary,
-  };
+  // TODO: 实现题目 3
+  return null;
 }
 
 function normalizeEmployees(rawList: RawEmployee[]): Employee[] {
-  return rawList.filter((raw): raw is RawEmployee => Boolean(raw)).reduce<Employee[]>((employees, raw) => {
-    const normalized = normalizeEmployee(raw);
-
-    if (normalized) {
-      employees.push(normalized);
-    }
-
-    return employees;
-  }, []);
+  // TODO: 实现题目 4
+  return [];
 }
 
 console.log(

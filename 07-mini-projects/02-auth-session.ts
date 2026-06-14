@@ -57,31 +57,13 @@ type Permission =
   | "system:admin";
 
 function hasPermission(state: AuthState, permission: Permission): boolean {
-  if (state.status !== "authenticated") {
-    return false;
-  }
-
-  if (state.user.role === "admin") {
-    return true;
-  }
-
-  const rolePermissions: Record<Exclude<Role, "admin">, Permission[]> = {
-    user: ["user:read", "article:read"],
-    editor: ["article:read", "article:write"],
-  };
-
-  return rolePermissions[state.user.role].includes(permission);
+  // TODO: 实现题目 3
+  return false;
 }
 
 function requireLogin(state: AuthState): User | string {
-  switch (state.status) {
-    case "authenticated":
-      return state.user;
-    case "guest":
-      return "请先登录";
-    case "expired":
-      return `登录已过期：${state.expiredAt.toISOString()}`;
-  }
+  // TODO: 实现题目 4
+  return "请先登录";
 }
 
 const adminState: AuthState = {

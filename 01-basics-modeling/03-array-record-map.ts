@@ -42,25 +42,22 @@ type Product = {
 function groupProductsByCategory(
   products: Product[],
 ): Record<ProductCategory, Product[]> {
-  const grouped: Record<ProductCategory, Product[]> = {
+  // TODO: 实现题目 2
+  return {
     book: [],
     food: [],
     digital: [],
   };
-
-  for (const product of products) {
-    grouped[product.category].push(product);
-  }
-
-  return grouped;
 }
 
 function getLowStockProducts(products: Product[], threshold: number): Product[] {
-  return products.filter((product) => product.stock <= threshold);
+  // TODO: 实现题目 3
+  return [];
 }
 
 function getInventoryValue(products: Product[]): number {
-  return products.reduce((total, product) => total + product.price * product.stock, 0);
+  // TODO: 实现题目 4
+  return 0;
 }
 
 const products: Product[] = [

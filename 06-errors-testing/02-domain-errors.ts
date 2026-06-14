@@ -38,31 +38,13 @@ function assertNever(value: never): never {
 }
 
 function formatPlaceOrderError(error: PlaceOrderError): string {
-  switch (error.type) {
-    case "PRODUCT_NOT_FOUND":
-      return `商品不存在：${error.productId}`;
-    case "OUT_OF_STOCK":
-      return `商品库存不足，当前库存：${error.availableStock}`;
-    case "USER_DISABLED":
-      return `用户已被禁用：${error.userId}`;
-    case "INVALID_QUANTITY":
-      return `下单数量不合法：${error.quantity}`;
-    default:
-      return assertNever(error);
-  }
+  // TODO: 实现题目 2
+  throw new Error(`TODO: ${error.type}`);
 }
 
 function canRetryPlaceOrder(error: PlaceOrderError): boolean {
-  switch (error.type) {
-    case "INVALID_QUANTITY":
-      return true;
-    case "PRODUCT_NOT_FOUND":
-    case "OUT_OF_STOCK":
-    case "USER_DISABLED":
-      return false;
-    default:
-      return assertNever(error);
-  }
+  // TODO: 实现题目 3
+  throw new Error(`TODO: ${error.type}`);
 }
 
 const orderErrors: PlaceOrderError[] = [

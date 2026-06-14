@@ -53,34 +53,17 @@ type Order = {
 };
 
 async function request<T>(url: string, options: RequestOptions): Promise<T> {
-  const init: RequestInit = {
-    method: options.method,
-    headers: {
-      "content-type": "application/json",
-      ...options.headers,
-    },
-  };
-
-  if (options.body !== undefined) {
-    init.body = JSON.stringify(options.body);
-  }
-
-  const response = await fetch(url, {
-    ...init,
-  });
-
-  if (!response.ok) {
-    throw new Error(`请求失败：${response.status}`);
-  }
-
-  return (await response.json()) as T;
+  // TODO: 使用 fetch 实现题目 2
+  throw new Error(`TODO: ${url} ${options.method}`);
 }
 
 async function getUser(id: string): Promise<User> {
+  // TODO: 实现题目 3
   return request<User>(`/api/users/${id}`, { method: "GET" });
 }
 
 async function createOrder(input: CreateOrderInput): Promise<Order> {
+  // TODO: 实现题目 4
   return request<Order>("/api/orders", { method: "POST", body: input });
 }
 

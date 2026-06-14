@@ -37,16 +37,12 @@ type Repository<T extends Entity> = {
 };
 
 function createMemoryRepository<T extends Entity>(): Repository<T> {
-  const store = new Map<string, T>();
-
+  // TODO: 实现题目 2
   return {
-    findById: (id) => store.get(id),
-    findAll: () => [...store.values()],
-    save: (entity) => {
-      store.set(entity.id, entity);
-      return entity;
-    },
-    remove: (id) => store.delete(id),
+    findById: () => undefined,
+    findAll: () => [],
+    save: (entity) => entity,
+    remove: () => false,
   };
 }
 

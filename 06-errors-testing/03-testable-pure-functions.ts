@@ -44,31 +44,18 @@ type Coupon =
   | { type: "percent"; value: number };
 
 function calculateSubtotal(items: CartItem[]): number {
-  return items.reduce((subtotal, item) => {
-    if (item.quantity <= 0 || item.price < 0) {
-      return subtotal;
-    }
-
-    return subtotal + item.price * item.quantity;
-  }, 0);
+  // TODO: 实现题目 3
+  return 0;
 }
 
 function applyCoupon(subtotal: number, coupon: Coupon): number {
-  if (coupon.value <= 0) {
-    return subtotal;
-  }
-
-  if (coupon.type === "amount") {
-    return Math.max(0, subtotal - coupon.value);
-  }
-
-  const discountRate = Math.min(coupon.value, 100) / 100;
-  return Math.max(0, subtotal * (1 - discountRate));
+  // TODO: 实现题目 4
+  return subtotal;
 }
 
 function calculatePayable(items: CartItem[], coupon?: Coupon): number {
-  const subtotal = calculateSubtotal(items);
-  return coupon ? applyCoupon(subtotal, coupon) : subtotal;
+  // TODO: 实现题目 5
+  return calculateSubtotal(items);
 }
 
 console.log(

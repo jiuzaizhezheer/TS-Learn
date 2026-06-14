@@ -54,55 +54,27 @@ type TodoFilters = {
 };
 
 function createTodo(title: string, priority: TodoPriority): Todo {
-  return {
-    id: `todo-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-    title,
-    status: "todo",
-    priority,
-    createdAt: new Date(),
-  };
+  // TODO: 实现题目 2
+  throw new Error("TODO");
 }
 
 function updateTodoStatus(todo: Todo, status: TodoStatus): Todo {
-  if (status === "done") {
-    return {
-      ...todo,
-      status,
-      completedAt: todo.completedAt ?? new Date(),
-    };
-  }
-
-  const { completedAt: _completedAt, ...todoWithoutCompletedAt } = todo;
-  return {
-    ...todoWithoutCompletedAt,
-    status,
-  };
+  // TODO: 实现题目 3
+  return todo;
 }
 
 function filterTodos(todos: Todo[], filters: TodoFilters): Todo[] {
-  const keyword = filters.keyword?.trim().toLowerCase();
-
-  return todos.filter((todo) => {
-    const matchesStatus = filters.status === undefined || todo.status === filters.status;
-    const matchesPriority = filters.priority === undefined || todo.priority === filters.priority;
-    const matchesKeyword = keyword === undefined || todo.title.toLowerCase().includes(keyword);
-
-    return matchesStatus && matchesPriority && matchesKeyword;
-  });
+  // TODO: 实现题目 4
+  return todos;
 }
 
 function getTodoStats(todos: Todo[]): Record<TodoStatus, number> {
-  const stats: Record<TodoStatus, number> = {
+  // TODO: 实现题目 5
+  return {
     todo: 0,
     doing: 0,
     done: 0,
   };
-
-  for (const todo of todos) {
-    stats[todo.status] += 1;
-  }
-
-  return stats;
 }
 
 const firstTodo = createTodo("学习 TypeScript 类型建模", "high");

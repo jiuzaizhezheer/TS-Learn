@@ -50,25 +50,17 @@ type PageCache<T> = {
 };
 
 function createPageCache<T>(): PageCache<T> {
-  const store = new Map<string, PageData<T>>();
-
+  // TODO: 实现题目 3
   return {
-    get: (key) => store.get(key),
-    set: (key, value) => {
-      store.set(key, value);
-    },
-    clear: () => {
-      store.clear();
-    },
+    get: () => undefined,
+    set: () => undefined,
+    clear: () => undefined,
   };
 }
 
 function buildQueryKey(params: QueryParams): string {
-  return JSON.stringify({
-    keyword: params.keyword?.trim() || "",
-    page: params.page,
-    pageSize: params.pageSize,
-  });
+  // TODO: 实现题目 4
+  return "";
 }
 
 const cache = createPageCache<{ id: string; title: string }>();

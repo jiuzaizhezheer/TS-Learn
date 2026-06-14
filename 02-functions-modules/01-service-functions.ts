@@ -46,26 +46,13 @@ type UpdateUserInput = {
 } & Partial<Pick<User, "name" | "email" | "role">>;
 
 function createUser(input: CreateUserInput): User {
-  const now = new Date();
-
-  return {
-    id: `user-${Date.now()}`,
-    ...input,
-    createdAt: now,
-    updatedAt: now,
-  };
+  // TODO: 实现题目 3
+  throw new Error("TODO");
 }
 
 function updateUser(user: User, input: UpdateUserInput): User {
-  if (user.id !== input.id) {
-    throw new Error(`用户 id 不匹配：${input.id}`);
-  }
-
-  return {
-    ...user,
-    ...input,
-    updatedAt: new Date(),
-  };
+  // TODO: 实现题目 4
+  throw new Error("TODO");
 }
 
 const createdUser = createUser({ name: "李四", email: "lisi@example.com", role: "member" });

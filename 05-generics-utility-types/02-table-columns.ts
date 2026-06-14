@@ -30,40 +30,13 @@ export {};
 */
 
 type TableColumn<T> = {
-  [Key in keyof T]: {
-    key: Key;
-    title: string;
-    render?: (value: T[Key], row: T) => string;
-  };
-}[keyof T];
+  key: keyof T;
+  title: string;
+  render?: (value: T[keyof T], row: T) => string;
+};
 
 function createColumns<T>(columns: TableColumn<T>[]): TableColumn<T>[] {
   return columns;
-}
-
-function renderCell<T, Key extends keyof T>(
-  column: {
-    key: Key;
-    title: string;
-    render?: (value: T[Key], row: T) => string;
-  },
-  row: T,
-): string {
-  const value = row[column.key];
-  return column.render ? column.render(value, row) : String(value);
-}
-
-function renderUserCell(column: TableColumn<User>, row: User): string {
-  switch (column.key) {
-    case "id":
-      return renderCell(column, row);
-    case "name":
-      return renderCell(column, row);
-    case "age":
-      return renderCell(column, row);
-    case "status":
-      return renderCell(column, row);
-  }
 }
 
 type User = {
@@ -74,27 +47,7 @@ type User = {
 };
 
 const userColumns = createColumns<User>([
-  { key: "name", title: "姓名" },
-  { key: "age", title: "年龄", render: (value) => `${value} 岁` },
-  {
-    key: "status",
-    title: "状态",
-    render: (value) => (value === "active" ? "启用" : "禁用"),
-  },
+  // TODO: 实现题目 3
 ]);
 
-const tableUser: User = {
-  id: "u1",
-  name: "小明",
-  age: 18,
-  status: "active",
-};
-
 console.log("[02-table-columns] columns:", userColumns);
-console.log(
-  "[02-table-columns] rendered row:",
-  userColumns.map((column) => ({
-    title: column.title,
-    value: renderUserCell(column, tableUser),
-  })),
-);

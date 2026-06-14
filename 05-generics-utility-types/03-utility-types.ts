@@ -49,20 +49,13 @@ type ArticleDraft = Omit<Article, "published"> & {
 };
 
 function publishArticle(article: Article): Article {
-  return {
-    ...article,
-    published: true,
-    updatedAt: new Date(),
-  };
+  // TODO: 实现题目 2
+  return article;
 }
 
 function toListItem(article: Article): ArticleListItem {
-  return {
-    id: article.id,
-    title: article.title,
-    authorName: article.authorName,
-    published: article.published,
-  };
+  // TODO: 实现题目 3
+  throw new Error("TODO");
 }
 
 const draftInput: CreateArticleInput = {

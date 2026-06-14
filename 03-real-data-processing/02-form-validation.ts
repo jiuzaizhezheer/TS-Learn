@@ -41,25 +41,8 @@ type RegisterForm = {
 type FormErrors<T> = Partial<Record<keyof T, string[]>>;
 
 function validateRegisterForm(form: RegisterForm): FormErrors<RegisterForm> {
-  const errors: FormErrors<RegisterForm> = {};
-
-  if (form.username.length < 3) {
-    errors.username = ["用户名至少需要 3 个字符"];
-  }
-
-  if (!form.email.includes("@")) {
-    errors.email = ["邮箱必须包含 @"];
-  }
-
-  if (form.password.length < 8) {
-    errors.password = ["密码至少需要 8 个字符"];
-  }
-
-  if (form.age !== undefined && form.age < 18) {
-    errors.age = ["年龄必须大于等于 18"];
-  }
-
-  return errors;
+  // TODO: 实现题目 3
+  return {};
 }
 
 console.log(

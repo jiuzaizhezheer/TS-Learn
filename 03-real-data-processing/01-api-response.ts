@@ -51,19 +51,13 @@ type User = {
 };
 
 function unwrapResponse<T>(response: ApiResponse<T>): T {
-  if (response.code !== 0) {
-    throw new Error(response.message);
-  }
-
-  return response.data;
+  // TODO: 实现题目 3
+  throw new Error("TODO");
 }
 
 function getTotalPages<T>(pageResult: PageResult<T>): number {
-  if (pageResult.pageSize <= 0) {
-    return 0;
-  }
-
-  return Math.ceil(pageResult.total / pageResult.pageSize);
+  // TODO: 实现题目 4
+  return 0;
 }
 
 const response: ApiResponse<PageResult<User>> = {
