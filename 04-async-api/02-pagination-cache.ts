@@ -1,0 +1,71 @@
+export {};
+
+/*
+阶段 4：分页和简单缓存
+
+真实场景：
+后台管理系统经常有分页列表，并且会缓存最近一次查询结果。
+
+题目 1：
+定义 QueryParams：
+- keyword?: string
+- page: number
+- pageSize: number
+
+题目 2：
+定义 PageData<T>：
+- items: T[]
+- total: number
+
+题目 3：
+实现 createPageCache<T>()，返回：
+- get(key): PageData<T> | undefined
+- set(key, value): void
+- clear(): void
+
+题目 4：
+实现 buildQueryKey(params)，要求同样的参数得到同样的 key。
+
+要求：
+- 缓存内部可以使用 Map
+- createPageCache 必须是泛型函数
+- key 的生成要避免 undefined 导致不稳定
+*/
+
+type QueryParams = {
+  keyword?: string;
+  page: number;
+  pageSize: number;
+};
+
+type PageData<T> = {
+  items: T[];
+  total: number;
+};
+
+type PageCache<T> = {
+  get(key: string): PageData<T> | undefined;
+  set(key: string, value: PageData<T>): void;
+  clear(): void;
+};
+
+function createPageCache<T>(): PageCache<T> {
+  // TODO: 实现题目 3
+  return {
+    get: () => undefined,
+    set: () => undefined,
+    clear: () => undefined,
+  };
+}
+
+function buildQueryKey(params: QueryParams): string {
+  // TODO: 实现题目 4
+  return "";
+}
+
+const cache = createPageCache<{ id: string; title: string }>();
+cache.set(buildQueryKey({ page: 1, pageSize: 10 }), {
+  items: [{ id: "a1", title: "公告" }],
+  total: 1,
+});
+
