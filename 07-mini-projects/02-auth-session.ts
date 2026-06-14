@@ -57,14 +57,46 @@ type Permission =
   | "system:admin";
 
 function hasPermission(state: AuthState, permission: Permission): boolean {
-  // TODO: 实现题目 3
-  return false;
+  if (state.status !== "authenticated") {
+    return false;
+  }
+
+  if (state.user.role === "admin") {
+    return true;
+  }
+
+  const rolePermissions: Record<Exclude<Role, "admin">, Permission[]> = {
+    user: ["user:read", "article:read"],
+    editor: ["article:read", "article:write"],
+  };
+
+  return rolePermissions[state.user.role].includes(permission);
 }
 
 function requireLogin(state: AuthState): User | string {
-  // TODO: 实现题目 4
-  return "请先登录";
+  switch (state.status) {
+    case "authenticated":
+      return state.user;
+    case "guest":
+      return "请先登录";
+    case "expired":
+      return `登录已过期：${state.expiredAt.toISOString()}`;
+  }
 }
 
-console.log(hasPermission({ status: "guest" }, "article:read"));
+const adminState: AuthState = {
+  status: "authenticated",
+  user: { id: "u1", name: "管理员", role: "admin" },
+  token: "token-admin",
+};
+const editorState: AuthState = {
+  status: "authenticated",
+  user: { id: "u2", name: "编辑", role: "editor" },
+  token: "token-editor",
+};
 
+console.log("[02-auth-session] guest can read:", hasPermission({ status: "guest" }, "article:read"));
+console.log("[02-auth-session] admin can admin:", hasPermission(adminState, "system:admin"));
+console.log("[02-auth-session] editor can user write:", hasPermission(editorState, "user:write"));
+console.log("[02-auth-session] require login:", requireLogin(editorState));
+console.log("[02-auth-session] expired:", requireLogin({ status: "expired", expiredAt: new Date("2026-01-01") }));

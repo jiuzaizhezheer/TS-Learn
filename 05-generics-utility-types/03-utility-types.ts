@@ -49,13 +49,20 @@ type ArticleDraft = Omit<Article, "published"> & {
 };
 
 function publishArticle(article: Article): Article {
-  // TODO: 实现题目 2
-  return article;
+  return {
+    ...article,
+    published: true,
+    updatedAt: new Date(),
+  };
 }
 
 function toListItem(article: Article): ArticleListItem {
-  // TODO: 实现题目 3
-  throw new Error("TODO");
+  return {
+    id: article.id,
+    title: article.title,
+    authorName: article.authorName,
+    published: article.published,
+  };
 }
 
 const draftInput: CreateArticleInput = {
@@ -67,5 +74,24 @@ const draftInput: CreateArticleInput = {
   published: false,
 };
 
-console.log(draftInput);
+const draftArticle: ArticleDraft = {
+  id: "a1",
+  title: draftInput.title,
+  content: draftInput.content,
+  authorId: draftInput.authorId,
+  authorName: draftInput.authorName,
+  tags: draftInput.tags,
+  published: false,
+  createdAt: new Date("2026-01-01"),
+  updatedAt: new Date("2026-01-01"),
+};
 
+const updateInput: UpdateArticleInput = {
+  id: "a1",
+  title: "TS 工具类型练习 - 更新版",
+};
+
+console.log("[03-utility-types] create input:", draftInput);
+console.log("[03-utility-types] update input:", updateInput);
+console.log("[03-utility-types] published:", publishArticle(draftArticle));
+console.log("[03-utility-types] list item:", toListItem(draftArticle));

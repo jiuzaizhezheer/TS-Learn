@@ -54,28 +54,79 @@ type AppNotification =
 type NotificationType = AppNotification["type"];
 
 function getNotificationTitle(notification: AppNotification): string {
-  // TODO: 实现题目 2
-  return "";
+  switch (notification.type) {
+    case "system":
+      return notification.title;
+    case "order":
+      return `订单 ${notification.orderId} 状态更新：${notification.status}`;
+    case "approval":
+      return `${notification.applicantName} 的审批${notification.approved ? "已通过" : "待处理"}`;
+  }
 }
 
 function markAsRead(
   list: AppNotification[],
   id: string,
 ): AppNotification[] {
-  // TODO: 实现题目 3
-  return list;
+  return list.map((notification) =>
+    notification.id === id
+      ? {
+          ...notification,
+          read: true,
+        }
+      : notification,
+  );
 }
 
 function groupUnreadCountByType(
   list: AppNotification[],
 ): Record<NotificationType, number> {
-  // TODO: 实现题目 4
-  return {
+  const counts: Record<NotificationType, number> = {
     system: 0,
     order: 0,
     approval: 0,
   };
+
+  for (const notification of list) {
+    if (!notification.read) {
+      counts[notification.type] += 1;
+    }
+  }
+
+  return counts;
 }
 
-console.log(groupUnreadCountByType([]));
+const notifications: AppNotification[] = [
+  {
+    id: "n1",
+    type: "system",
+    title: "系统维护",
+    content: "今晚 23:00 维护",
+    read: false,
+    createdAt: new Date("2026-01-01"),
+  },
+  {
+    id: "n2",
+    type: "order",
+    orderId: "o1",
+    status: "paid",
+    read: false,
+    createdAt: new Date("2026-01-02"),
+  },
+  {
+    id: "n3",
+    type: "approval",
+    approvalId: "ap1",
+    applicantName: "张三",
+    approved: true,
+    read: true,
+    createdAt: new Date("2026-01-03"),
+  },
+];
 
+const readNotifications = markAsRead(notifications, "n1");
+
+console.log("[03-notification-center] titles:", notifications.map((item) => getNotificationTitle(item)));
+console.log("[03-notification-center] unread counts:", groupUnreadCountByType(notifications));
+console.log("[03-notification-center] after read:", groupUnreadCountByType(readNotifications));
+console.log("[03-notification-center] immutable check:", notifications[0]?.read, readNotifications[0]?.read);

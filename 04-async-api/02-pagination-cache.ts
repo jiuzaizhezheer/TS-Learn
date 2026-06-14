@@ -50,17 +50,25 @@ type PageCache<T> = {
 };
 
 function createPageCache<T>(): PageCache<T> {
-  // TODO: 实现题目 3
+  const store = new Map<string, PageData<T>>();
+
   return {
-    get: () => undefined,
-    set: () => undefined,
-    clear: () => undefined,
+    get: (key) => store.get(key),
+    set: (key, value) => {
+      store.set(key, value);
+    },
+    clear: () => {
+      store.clear();
+    },
   };
 }
 
 function buildQueryKey(params: QueryParams): string {
-  // TODO: 实现题目 4
-  return "";
+  return JSON.stringify({
+    keyword: params.keyword?.trim() || "",
+    page: params.page,
+    pageSize: params.pageSize,
+  });
 }
 
 const cache = createPageCache<{ id: string; title: string }>();
@@ -69,3 +77,10 @@ cache.set(buildQueryKey({ page: 1, pageSize: 10 }), {
   total: 1,
 });
 
+const firstPageKey = buildQueryKey({ page: 1, pageSize: 10 });
+const keywordKey = buildQueryKey({ keyword: "公告", page: 1, pageSize: 10 });
+
+console.log("[02-pagination-cache] cached first page:", cache.get(firstPageKey));
+console.log("[02-pagination-cache] missing keyword page:", cache.get(keywordKey));
+cache.clear();
+console.log("[02-pagination-cache] after clear:", cache.get(firstPageKey));

@@ -37,12 +37,16 @@ type Repository<T extends Entity> = {
 };
 
 function createMemoryRepository<T extends Entity>(): Repository<T> {
-  // TODO: 实现题目 2
+  const store = new Map<string, T>();
+
   return {
-    findById: () => undefined,
-    findAll: () => [],
-    save: (entity) => entity,
-    remove: () => false,
+    findById: (id) => store.get(id),
+    findAll: () => [...store.values()],
+    save: (entity) => {
+      store.set(entity.id, entity);
+      return entity;
+    },
+    remove: (id) => store.delete(id),
   };
 }
 
@@ -61,3 +65,8 @@ const productRepo = createMemoryRepository<Product>();
 userRepo.save({ id: "u1", name: "小明" });
 productRepo.save({ id: "p1", title: "鼠标", price: 99 });
 
+console.log("[01-repository] user:", userRepo.findById("u1"));
+console.log("[01-repository] all products:", productRepo.findAll());
+console.log("[01-repository] remove missing:", productRepo.remove("missing"));
+console.log("[01-repository] remove existing:", productRepo.remove("p1"));
+console.log("[01-repository] products after remove:", productRepo.findAll());

@@ -50,19 +50,40 @@ type Employee = {
 };
 
 function normalizeEmployee(raw: RawEmployee): Employee | null {
-  // TODO: 实现题目 3
-  return null;
+  const name = raw.name.trim();
+  const salary = Number(raw.salary);
+
+  if (!name || Number.isNaN(salary) || salary < 0) {
+    return null;
+  }
+
+  return {
+    id: String(raw.id),
+    name,
+    department: raw.department?.trim() || "未分配",
+    salary,
+  };
 }
 
 function normalizeEmployees(rawList: RawEmployee[]): Employee[] {
-  // TODO: 实现题目 4
-  return [];
+  return rawList.filter((raw): raw is RawEmployee => Boolean(raw)).reduce<Employee[]>((employees, raw) => {
+    const normalized = normalizeEmployee(raw);
+
+    if (normalized) {
+      employees.push(normalized);
+    }
+
+    return employees;
+  }, []);
 }
 
 console.log(
+  "[03-normalize-raw-data] list:",
   normalizeEmployees([
     { id: 1, name: " 赵六 ", salary: "12000" },
     { id: 2, name: "", salary: "abc" },
+    { id: "3", name: "钱七", department: " 研发 ", salary: 18000 },
+    { id: "4", name: "孙八", salary: -1 },
   ]),
 );
-
+console.log("[03-normalize-raw-data] single invalid:", normalizeEmployee({ id: 5, name: " ", salary: 100 }));

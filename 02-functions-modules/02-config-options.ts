@@ -42,12 +42,39 @@ type LoggerOptions = {
 type Logger = Record<LogLevel, (message: string) => void>;
 
 function createLogger(options?: Partial<LoggerOptions>): Logger {
-  // TODO: 实现题目 2 和题目 3
+  const config: LoggerOptions = {
+    level: options?.level ?? "info",
+    timestamp: options?.timestamp ?? true,
+    ...(options?.prefix ? { prefix: options.prefix } : {}),
+  };
+
+  const levelWeight: Record<LogLevel, number> = {
+    debug: 10,
+    info: 20,
+    warn: 30,
+    error: 40,
+  };
+
+  const write = (level: LogLevel, message: string): void => {
+    if (levelWeight[level] < levelWeight[config.level]) {
+      return;
+    }
+
+    const parts = [
+      config.timestamp ? new Date().toISOString() : undefined,
+      `[${level.toUpperCase()}]`,
+      config.prefix ? `[${config.prefix}]` : undefined,
+      message,
+    ].filter((part): part is string => Boolean(part));
+
+    console.log(parts.join(" "));
+  };
+
   return {
-    debug: () => undefined,
-    info: () => undefined,
-    warn: () => undefined,
-    error: () => undefined,
+    debug: (message) => write("debug", message),
+    info: (message) => write("info", message),
+    warn: (message) => write("warn", message),
+    error: (message) => write("error", message),
   };
 }
 
@@ -55,3 +82,6 @@ const logger = createLogger({ level: "warn", prefix: "OrderService" });
 logger.info("这条不应该输出");
 logger.error("这条应该输出");
 
+const debugLogger = createLogger({ level: "debug", prefix: "DebugService", timestamp: false });
+debugLogger.debug("[02-config-options] debug 输出");
+debugLogger.info("[02-config-options] info 输出");

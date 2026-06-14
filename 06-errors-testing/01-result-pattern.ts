@@ -46,14 +46,42 @@ type User = {
 };
 
 function login(username: string, password: string): Result<User, LoginError> {
-  // TODO: 实现题目 3
-  return { ok: false, error: "INVALID_PASSWORD" };
+  if (!username.trim()) {
+    return { ok: false, error: "EMPTY_USERNAME" };
+  }
+
+  if (!password) {
+    return { ok: false, error: "EMPTY_PASSWORD" };
+  }
+
+  if (password !== "12345678") {
+    return { ok: false, error: "INVALID_PASSWORD" };
+  }
+
+  return {
+    ok: true,
+    data: {
+      id: "u1",
+      username,
+    },
+  };
 }
 
 function getLoginMessage(result: Result<User, LoginError>): string {
-  // TODO: 实现题目 4
-  return "";
+  if (result.ok) {
+    return `欢迎回来，${result.data.username}`;
+  }
+
+  const errorMessage: Record<LoginError, string> = {
+    EMPTY_USERNAME: "请输入用户名",
+    EMPTY_PASSWORD: "请输入密码",
+    INVALID_PASSWORD: "密码错误",
+  };
+
+  return errorMessage[result.error];
 }
 
-console.log(getLoginMessage(login("admin", "wrong")));
-
+console.log("[01-result-pattern] empty username:", getLoginMessage(login("", "12345678")));
+console.log("[01-result-pattern] empty password:", getLoginMessage(login("admin", "")));
+console.log("[01-result-pattern] wrong password:", getLoginMessage(login("admin", "wrong")));
+console.log("[01-result-pattern] success:", getLoginMessage(login("admin", "12345678")));

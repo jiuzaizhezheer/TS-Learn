@@ -42,30 +42,34 @@ type Product = {
 function groupProductsByCategory(
   products: Product[],
 ): Record<ProductCategory, Product[]> {
-  // TODO: 实现题目 2
-  return {
+  const grouped: Record<ProductCategory, Product[]> = {
     book: [],
     food: [],
     digital: [],
   };
+
+  for (const product of products) {
+    grouped[product.category].push(product);
+  }
+
+  return grouped;
 }
 
 function getLowStockProducts(products: Product[], threshold: number): Product[] {
-  // TODO: 实现题目 3
-  return [];
+  return products.filter((product) => product.stock <= threshold);
 }
 
 function getInventoryValue(products: Product[]): number {
-  // TODO: 实现题目 4
-  return 0;
+  return products.reduce((total, product) => total + product.price * product.stock, 0);
 }
 
 const products: Product[] = [
   { id: "p1", name: "TypeScript 入门", category: "book", price: 68, stock: 10 },
   { id: "p2", name: "键盘", category: "digital", price: 399, stock: 2 },
+  { id: "p3", name: "咖啡", category: "food", price: 18, stock: 0 },
 ];
 
-console.log(groupProductsByCategory(products));
-console.log(getLowStockProducts(products, 3));
-console.log(getInventoryValue(products));
-
+console.log("[03-array-record-map] grouped:", groupProductsByCategory(products));
+console.log("[03-array-record-map] low stock <= 3:", getLowStockProducts(products, 3));
+console.log("[03-array-record-map] inventory value:", getInventoryValue(products));
+console.log("[03-array-record-map] empty inventory value:", getInventoryValue([]));

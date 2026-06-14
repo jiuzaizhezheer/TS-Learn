@@ -54,28 +54,64 @@ type TodoFilters = {
 };
 
 function createTodo(title: string, priority: TodoPriority): Todo {
-  // TODO: 实现题目 2
-  throw new Error("TODO");
+  return {
+    id: `todo-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    title,
+    status: "todo",
+    priority,
+    createdAt: new Date(),
+  };
 }
 
 function updateTodoStatus(todo: Todo, status: TodoStatus): Todo {
-  // TODO: 实现题目 3
-  return todo;
+  if (status === "done") {
+    return {
+      ...todo,
+      status,
+      completedAt: todo.completedAt ?? new Date(),
+    };
+  }
+
+  const { completedAt: _completedAt, ...todoWithoutCompletedAt } = todo;
+  return {
+    ...todoWithoutCompletedAt,
+    status,
+  };
 }
 
 function filterTodos(todos: Todo[], filters: TodoFilters): Todo[] {
-  // TODO: 实现题目 4
-  return todos;
+  const keyword = filters.keyword?.trim().toLowerCase();
+
+  return todos.filter((todo) => {
+    const matchesStatus = filters.status === undefined || todo.status === filters.status;
+    const matchesPriority = filters.priority === undefined || todo.priority === filters.priority;
+    const matchesKeyword = keyword === undefined || todo.title.toLowerCase().includes(keyword);
+
+    return matchesStatus && matchesPriority && matchesKeyword;
+  });
 }
 
 function getTodoStats(todos: Todo[]): Record<TodoStatus, number> {
-  // TODO: 实现题目 5
-  return {
+  const stats: Record<TodoStatus, number> = {
     todo: 0,
     doing: 0,
     done: 0,
   };
+
+  for (const todo of todos) {
+    stats[todo.status] += 1;
+  }
+
+  return stats;
 }
 
-console.log(getTodoStats([]));
+const firstTodo = createTodo("学习 TypeScript 类型建模", "high");
+const secondTodo = createTodo("整理练习日志", "medium");
+const doingTodo = updateTodoStatus(firstTodo, "doing");
+const doneTodo = updateTodoStatus(secondTodo, "done");
+const todos = [doingTodo, doneTodo];
 
+console.log("[01-todo-service] created:", firstTodo);
+console.log("[01-todo-service] done:", doneTodo);
+console.log("[01-todo-service] filtered:", filterTodos(todos, { status: "doing", keyword: "typescript" }));
+console.log("[01-todo-service] stats:", getTodoStats(todos));

@@ -38,17 +38,64 @@ async function withTimeout<T>(
   task: () => Promise<T>,
   timeoutMs: number,
 ): Promise<T> {
-  // TODO: 实现题目 2
-  throw new Error(`TODO: ${timeoutMs}`);
+  let timer: ReturnType<typeof setTimeout> | undefined;
+
+  try {
+    return await Promise.race([
+      task(),
+      new Promise<never>((_, reject) => {
+        timer = setTimeout(() => reject(new Error(`任务超时：${timeoutMs}ms`)), timeoutMs);
+      }),
+    ]);
+  } finally {
+    if (timer) {
+      clearTimeout(timer);
+    }
+  }
 }
 
 async function retry<T>(
   task: () => Promise<T>,
   options: RetryOptions,
 ): Promise<T> {
-  // TODO: 实现题目 3，可以使用 sleep
-  throw new Error(`TODO: ${options.retries}`);
+  let lastError: unknown;
+
+  for (let attempt = 0; attempt <= options.retries; attempt += 1) {
+    try {
+      return await withTimeout(task, options.timeoutMs);
+    } catch (error) {
+      lastError = error;
+
+      if (attempt < options.retries) {
+        await sleep(options.delayMs);
+      }
+    }
+  }
+
+  throw lastError instanceof Error ? lastError : new Error("任务失败");
 }
 
-void retry(async () => "ok", { retries: 3, delayMs: 300, timeoutMs: 1000 });
+let failedTimes = 0;
 
+console.log("[03-retry-timeout] success:", await retry(async () => "ok", { retries: 3, delayMs: 10, timeoutMs: 1000 }));
+console.log(
+  "[03-retry-timeout] retry success:",
+  await retry(
+    async () => {
+      failedTimes += 1;
+
+      if (failedTimes < 2) {
+        throw new Error("临时失败");
+      }
+
+      return "第二次成功";
+    },
+    { retries: 3, delayMs: 10, timeoutMs: 1000 },
+  ),
+);
+
+try {
+  await retry(async () => sleep(30).then(() => "too late"), { retries: 1, delayMs: 10, timeoutMs: 5 });
+} catch (error) {
+  console.log("[03-retry-timeout] timeout:", error instanceof Error ? error.message : error);
+}

@@ -44,13 +44,21 @@ type UserProfile = {
 };
 
 function formatUserDisplayName(user: UserProfile): string {
-  // TODO: 在这里实现题目 2
-  throw new Error("TODO");
+  const roleLabel: Record<UserRole, string> = {
+    admin: "管理员",
+    editor: "编辑",
+    viewer: "访客",
+  };
+
+  return `[${roleLabel[user.role]}] ${user.name}`;
 }
 
 function maskContact(user: UserProfile): string {
-  // TODO: 在这里实现题目 3
-  throw new Error("TODO");
+  if (!user.phone) {
+    return user.email;
+  }
+
+  return `${user.phone.slice(0, 3)}****${user.phone.slice(-4)}`;
 }
 
 const demoUser: UserProfile = {
@@ -62,6 +70,22 @@ const demoUser: UserProfile = {
   createdAt: new Date(),
 };
 
-console.log(formatUserDisplayName(demoUser));
-console.log(maskContact(demoUser));
+const editorUser: UserProfile = {
+  ...demoUser,
+  id: 2,
+  name: "李四",
+  role: "editor",
+};
 
+const viewerWithoutPhone: UserProfile = {
+  id: 3,
+  name: "王五",
+  email: "wangwu@example.com",
+  role: "viewer",
+  createdAt: new Date(),
+};
+
+console.log("[01-user-profile] admin display:", formatUserDisplayName(demoUser));
+console.log("[01-user-profile] editor display:", formatUserDisplayName(editorUser));
+console.log("[01-user-profile] masked phone:", maskContact(demoUser));
+console.log("[01-user-profile] fallback email:", maskContact(viewerWithoutPhone));

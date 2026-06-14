@@ -51,13 +51,19 @@ type User = {
 };
 
 function unwrapResponse<T>(response: ApiResponse<T>): T {
-  // TODO: 实现题目 3
-  throw new Error("TODO");
+  if (response.code !== 0) {
+    throw new Error(response.message);
+  }
+
+  return response.data;
 }
 
 function getTotalPages<T>(pageResult: PageResult<T>): number {
-  // TODO: 实现题目 4
-  return 0;
+  if (pageResult.pageSize <= 0) {
+    return 0;
+  }
+
+  return Math.ceil(pageResult.total / pageResult.pageSize);
 }
 
 const response: ApiResponse<PageResult<User>> = {
@@ -71,5 +77,17 @@ const response: ApiResponse<PageResult<User>> = {
   },
 };
 
-console.log(getTotalPages(unwrapResponse(response)));
+const failedResponse: ApiResponse<null> = {
+  code: 500,
+  message: "服务异常",
+  data: null,
+};
 
+console.log("[01-api-response] total pages:", getTotalPages(unwrapResponse(response)));
+console.log("[01-api-response] empty total pages:", getTotalPages({ list: [], page: 1, pageSize: 10, total: 0 }));
+
+try {
+  unwrapResponse(failedResponse);
+} catch (error) {
+  console.log("[01-api-response] failed message:", error instanceof Error ? error.message : error);
+}

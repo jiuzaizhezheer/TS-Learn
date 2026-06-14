@@ -44,24 +44,49 @@ type Coupon =
   | { type: "percent"; value: number };
 
 function calculateSubtotal(items: CartItem[]): number {
-  // TODO: 实现题目 3
-  return 0;
+  return items.reduce((subtotal, item) => {
+    if (item.quantity <= 0 || item.price < 0) {
+      return subtotal;
+    }
+
+    return subtotal + item.price * item.quantity;
+  }, 0);
 }
 
 function applyCoupon(subtotal: number, coupon: Coupon): number {
-  // TODO: 实现题目 4
-  return subtotal;
+  if (coupon.value <= 0) {
+    return subtotal;
+  }
+
+  if (coupon.type === "amount") {
+    return Math.max(0, subtotal - coupon.value);
+  }
+
+  const discountRate = Math.min(coupon.value, 100) / 100;
+  return Math.max(0, subtotal * (1 - discountRate));
 }
 
 function calculatePayable(items: CartItem[], coupon?: Coupon): number {
-  // TODO: 实现题目 5
-  return calculateSubtotal(items);
+  const subtotal = calculateSubtotal(items);
+  return coupon ? applyCoupon(subtotal, coupon) : subtotal;
 }
 
 console.log(
+  "[03-testable-pure-functions] percent coupon:",
   calculatePayable(
     [{ productId: "p1", price: 100, quantity: 2 }],
     { type: "percent", value: 20 },
   ),
 );
-
+console.log(
+  "[03-testable-pure-functions] amount coupon:",
+  calculatePayable(
+    [
+      { productId: "p1", price: 100, quantity: 2 },
+      { productId: "p2", price: 50, quantity: 0 },
+      { productId: "p3", price: -10, quantity: 1 },
+    ],
+    { type: "amount", value: 250 },
+  ),
+);
+console.log("[03-testable-pure-functions] no coupon:", calculatePayable([{ productId: "p4", price: 30, quantity: 3 }]));

@@ -38,13 +38,45 @@ function assertNever(value: never): never {
 }
 
 function formatPlaceOrderError(error: PlaceOrderError): string {
-  // TODO: 实现题目 2
-  throw new Error(`TODO: ${error.type}`);
+  switch (error.type) {
+    case "PRODUCT_NOT_FOUND":
+      return `商品不存在：${error.productId}`;
+    case "OUT_OF_STOCK":
+      return `商品库存不足，当前库存：${error.availableStock}`;
+    case "USER_DISABLED":
+      return `用户已被禁用：${error.userId}`;
+    case "INVALID_QUANTITY":
+      return `下单数量不合法：${error.quantity}`;
+    default:
+      return assertNever(error);
+  }
 }
 
 function canRetryPlaceOrder(error: PlaceOrderError): boolean {
-  // TODO: 实现题目 3
-  throw new Error(`TODO: ${error.type}`);
+  switch (error.type) {
+    case "INVALID_QUANTITY":
+      return true;
+    case "PRODUCT_NOT_FOUND":
+    case "OUT_OF_STOCK":
+    case "USER_DISABLED":
+      return false;
+    default:
+      return assertNever(error);
+  }
 }
 
-console.log(formatPlaceOrderError({ type: "INVALID_QUANTITY", quantity: 0 }));
+const orderErrors: PlaceOrderError[] = [
+  { type: "PRODUCT_NOT_FOUND", productId: "p404" },
+  { type: "OUT_OF_STOCK", productId: "p1", availableStock: 0 },
+  { type: "USER_DISABLED", userId: "u1" },
+  { type: "INVALID_QUANTITY", quantity: 0 },
+];
+
+console.log(
+  "[02-domain-errors] formatted:",
+  orderErrors.map((error) => formatPlaceOrderError(error)),
+);
+console.log(
+  "[02-domain-errors] retry flags:",
+  orderErrors.map((error) => ({ type: error.type, canRetry: canRetryPlaceOrder(error) })),
+);
