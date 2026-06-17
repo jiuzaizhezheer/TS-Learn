@@ -55,10 +55,10 @@ function formatUserDisplayName(user: UserProfile): string {
 
 function maskContact(user: UserProfile): string {
   // TODO: 在这里实现题目 3
-  return user.phone?
-    user.phone.slice(0, 3) + "****" + user.phone.slice(-4,) 
-    : user.email  
-  }
+  return user.phone ?
+    user.phone.slice(0, 3) + "****" + user.phone.slice(-4,)
+    : user.email
+}
 
 const demoUser: UserProfile = {
   id: 1,
