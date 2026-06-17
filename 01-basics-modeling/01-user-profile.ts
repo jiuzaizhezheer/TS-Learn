@@ -1,4 +1,4 @@
-export {};
+export { };
 
 /*
 阶段 1：对象建模和基础类型
@@ -45,13 +45,20 @@ type UserProfile = {
 
 function formatUserDisplayName(user: UserProfile): string {
   // TODO: 在这里实现题目 2
-  throw new Error("TODO");
+  const nameMap: Record<UserRole, string> = {
+    admin: "管理员",
+    editor: "编辑",
+    viewer: "访客",
+  }
+  return `[${nameMap[user.role]}] ${user.name}`
 }
 
 function maskContact(user: UserProfile): string {
   // TODO: 在这里实现题目 3
-  throw new Error("TODO");
-}
+  return user.phone?
+    user.phone.slice(0, 3) + "****" + user.phone.slice(-4,) 
+    : user.email  
+  }
 
 const demoUser: UserProfile = {
   id: 1,
