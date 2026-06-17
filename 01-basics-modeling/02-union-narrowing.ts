@@ -1,4 +1,4 @@
-export {};
+export { };
 
 /*
 阶段 1：联合类型和类型收窄
@@ -22,7 +22,7 @@ export {};
 故意新增一种支付方式 "paypal"，观察 TypeScript 是否能提示你没有处理完整。
 
 要求：
-- 使用判别联合类型
+- 使用判别联合类型：Discriminated Union
 - switch 里加 exhaustive check
 - 不要把所有字段都写成可选字段
 */
@@ -43,7 +43,11 @@ type BankCardPayment = {
   bankName: string;
 };
 
-type Payment = WechatPayment | AlipayPayment | BankCardPayment;
+type PayPalPayment = {
+  kind: "paypal";
+};
+
+type Payment = WechatPayment | AlipayPayment | BankCardPayment | PayPalPayment;
 
 function assertNever(value: never): never {
   throw new Error(`Unhandled value: ${JSON.stringify(value)}`);
@@ -51,7 +55,18 @@ function assertNever(value: never): never {
 
 function getPaymentSummary(payment: Payment): string {
   // TODO: 使用 switch payment.kind 实现题目 2
-  throw new Error(`TODO: ${payment.kind}`);
+  switch (payment.kind) {
+    case "wechat":
+      return `微信支付：${payment.openId.slice(-4)}`;
+    case "alipay":
+      return `支付宝支付：${payment.account}`;
+    case "bank-card":
+      return `银行卡支付：${payment.bankName}${payment.cardNo.slice(-4)}`;
+    case "paypal":
+      return "paypal";
+    default:
+      return assertNever(payment);
+  }
 }
 
 console.log("[02-union-narrowing] wechat:", getPaymentSummary({ kind: "wechat", openId: "wx_open_1234" }));
