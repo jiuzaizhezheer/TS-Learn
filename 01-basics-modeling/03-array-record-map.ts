@@ -1,4 +1,4 @@
-export {};
+export { };
 
 /*
 阶段 1：数组、Record、Map 思维
@@ -42,22 +42,38 @@ type Product = {
 function groupProductsByCategory(
   products: Product[],
 ): Record<ProductCategory, Product[]> {
-  // TODO: 实现题目 2
-  return {
+  // TODO: 实现题目 2\
+  const map: Record<ProductCategory, Product[]> = {
     book: [],
     food: [],
     digital: [],
   };
+  for (const product of products) {
+    map[product.category].push(product)
+  }
+  return map
 }
 
 function getLowStockProducts(products: Product[], threshold: number): Product[] {
   // TODO: 实现题目 3
-  return [];
+  const list: Product[] = []
+  for (const product of products) {
+    if (product.stock <= threshold) {
+      list.push(product)
+    }
+  }
+  // return products.filter( product => product.stock <= threshold)
+  return list;
 }
 
 function getInventoryValue(products: Product[]): number {
   // TODO: 实现题目 4
-  return 0;
+  let totalValue: number = 0
+  for (const product of products) {
+    totalValue += product.price * product.stock
+  }
+  // return products.reduce((total, product) => total + product.price * product.stock, 0)
+  return totalValue;
 }
 
 const products: Product[] = [
