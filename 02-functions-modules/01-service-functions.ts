@@ -1,4 +1,4 @@
-export {};
+export { };
 
 /*
 阶段 2：服务函数签名设计
@@ -47,12 +47,23 @@ type UpdateUserInput = {
 
 function createUser(input: CreateUserInput): User {
   // TODO: 实现题目 3
-  throw new Error("TODO");
+  return {
+    id: "11111",
+    ...input,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  };
 }
 
 function updateUser(user: User, input: UpdateUserInput): User {
   // TODO: 实现题目 4
-  throw new Error("TODO");
+  return {
+    ...user,
+    name: input.name ?? user.name,
+    email: input.email ?? user.email,
+    role: input.role ?? user.role,    
+    updatedAt: new Date() // 更新时，更新修改时间
+  };
 }
 
 const createdUser = createUser({ name: "李四", email: "lisi@example.com", role: "member" });
