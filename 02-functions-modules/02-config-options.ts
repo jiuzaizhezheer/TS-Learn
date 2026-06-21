@@ -1,4 +1,4 @@
-export {};
+export { };
 
 /*
 阶段 2：配置对象和默认值
@@ -41,13 +41,73 @@ type LoggerOptions = {
 
 type Logger = Record<LogLevel, (message: string) => void>;
 
-function createLogger(options?: Partial<LoggerOptions>): Logger {
-  // TODO: 实现题目 2 和题目 3
+function createLogger({
+  level = "info",
+  prefix = "",
+  timestamp = true,
+}: Partial<LoggerOptions> = {}): Logger {
+  // 1. 组装最终配置
+  const config: LoggerOptions = {
+    level,
+    prefix,
+    timestamp,
+  };
+
+  // 2. 定义级别权重，用于比较日志级别高低
+  const levelWeights: Record<LogLevel, number> = {
+    debug: 1,
+    info: 2,
+    warn: 3,
+    error: 4,
+  };
+
+  const targetWeight = levelWeights[config.level];
+
+  // 3. 通用日志输出处理函数
+  const print = (level: LogLevel, message: string) => {
+    // 如果当前调用的级别权重低于配置的级别权重，则不输出
+    if (levelWeights[level] < targetWeight) {
+      return;
+    }
+
+    const parts: string[] = [];
+    
+    // 如果配置了显示时间戳
+    if (config.timestamp) {
+      parts.push(`[${new Date().toISOString()}]`);
+    }
+    
+    // 如果配置了前缀
+    if (config.prefix) {
+      parts.push(`[${config.prefix}]`);
+    }
+    
+    parts.push(message);
+
+    const output = parts.join(" ");
+
+    // 根据不同的级别调用不同的 console 方法
+    switch (level) {
+      case "debug":
+        console.debug(output);
+        break;
+      case "info":
+        console.info(output);
+        break;
+      case "warn":
+        console.warn(output);
+        break;
+      case "error":
+        console.error(output);
+        break;
+    }
+  };
+
   return {
-    debug: () => undefined,
-    info: () => undefined,
-    warn: () => undefined,
-    error: () => undefined,
+    debug: (message: string) => print("debug", message),
+    info: (message: string) => print("info", message),
+    warn: (message: string) => print("warn", message),
+    error: (message: string) => print("error", message),
   };
 }
 
