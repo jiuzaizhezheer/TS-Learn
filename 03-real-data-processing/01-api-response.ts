@@ -1,4 +1,4 @@
-export {};
+export { };
 
 /*
 阶段 3：API 响应类型
@@ -52,12 +52,16 @@ type User = {
 
 function unwrapResponse<T>(response: ApiResponse<T>): T {
   // TODO: 实现题目 3
-  throw new Error("TODO");
+  if (response.code === 0) {
+    return response.data
+  }
+  throw new Error(response.message)
 }
 
 function getTotalPages<T>(pageResult: PageResult<T>): number {
   // TODO: 实现题目 4
-  return 0;
+  if (pageResult.pageSize <= 0) return 0
+  return Math.ceil(pageResult.total / pageResult.pageSize);
 }
 
 const response: ApiResponse<PageResult<User>> = {
