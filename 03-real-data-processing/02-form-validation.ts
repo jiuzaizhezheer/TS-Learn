@@ -1,4 +1,4 @@
-export {};
+export { };
 
 /*
 阶段 3：表单校验
@@ -42,7 +42,20 @@ type FormErrors<T> = Partial<Record<keyof T, string[]>>;
 
 function validateRegisterForm(form: RegisterForm): FormErrors<RegisterForm> {
   // TODO: 实现题目 3
-  return {};
+   const errors: FormErrors<RegisterForm> = {};
+  if (form.username.length < 3) {
+    errors.username = ["用户名长度至少 3"];
+  }
+  if (!form.email.includes("@")) {
+    errors.email = ["邮箱必须包含 @"];
+  }
+  if (form.password.length < 8) {
+    errors.password = ["密码长度至少 8"];
+  }
+  if (form.age !== undefined && form.age < 18) {
+    errors.age = ["年龄必须大于等于 18"];
+  }
+  return errors;
 }
 
 console.log(
