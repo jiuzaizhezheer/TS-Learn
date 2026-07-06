@@ -1,4 +1,4 @@
-export {};
+export { };
 
 /*
 阶段 3：清洗不可靠数据
@@ -49,14 +49,30 @@ type Employee = {
   salary: number;
 };
 
+
+function parseSalary(salary: number | string): number | null {
+  if (typeof salary === "string" && salary.trim() === "") {
+    return null;
+  }
+  const value = Number(salary);
+  return Number.isFinite(value) && value >= 0 ? value : null;
+}
 function normalizeEmployee(raw: RawEmployee): Employee | null {
   // TODO: 实现题目 3
-  return null;
+  const id: string = String(raw.id)
+  const name: string = raw.name.trim()
+  if (name === "") return null
+  const department: string = raw.department?.trim() || "未分配"
+  const salary = parseSalary(raw.salary)
+
+  if (salary === null) return null
+  return { id, name, department, salary }
 }
 
 function normalizeEmployees(rawList: RawEmployee[]): Employee[] {
-  // TODO: 实现题目 4
-  return [];
+  return rawList
+    .map(normalizeEmployee)
+    .filter((e): e is Employee => e !== null);
 }
 
 console.log(
