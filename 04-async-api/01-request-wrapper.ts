@@ -1,4 +1,4 @@
-export {};
+export { };
 
 /*
 阶段 4：异步请求封装
@@ -52,21 +52,6 @@ type Order = {
   status: "created" | "paid" | "cancelled";
 };
 
-async function request<T>(url: string, options: RequestOptions): Promise<T> {
-  // TODO: 使用 fetch 实现题目 2
-  throw new Error(`TODO: ${url} ${options.method}`);
-}
-
-async function getUser(id: string): Promise<User> {
-  // TODO: 实现题目 3
-  return request<User>(`/api/users/${id}`, { method: "GET" });
-}
-
-async function createOrder(input: CreateOrderInput): Promise<Order> {
-  // TODO: 实现题目 4
-  return request<Order>("/api/orders", { method: "POST", body: input });
-}
-
 const originalFetch = globalThis.fetch;
 
 globalThis.fetch = async (url, init) => {
@@ -83,11 +68,46 @@ globalThis.fetch = async (url, init) => {
       productId: input.productId,
       quantity: input.quantity,
       status: "created",
-    } satisfies Order);
+    });
   }
 
   return new Response("Not Found", { status: 404 });
 };
+
+
+async function request<T>(url: string, options: RequestOptions): Promise<T> {
+  // TODO: 使用 fetch 实现题目 2
+  const init: RequestInit = {
+    method: options.method,
+    headers: { ...options.headers },
+  };
+
+  if (options.body !== undefined) {
+    init.headers = {
+      "Content-Type": "application/json",
+      ...options.headers,
+    };
+    init.body = JSON.stringify(options.body);
+  }
+
+  const response = await fetch(url, init);
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return response.json() as Promise<T>;
+}
+
+async function getUser(id: string): Promise<User> {
+  // TODO: 实现题目 3
+  return request<User>(`/api/users/${id}`, { method: "GET" });
+}
+
+async function createOrder(input: CreateOrderInput): Promise<Order> {
+  // TODO: 实现题目 4
+  return request<Order>("/api/orders", { method: "POST", body: input });
+}
 
 try {
   console.log("[01-request-wrapper] get user:", await getUser("u1"));
