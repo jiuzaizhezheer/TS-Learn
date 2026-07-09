@@ -1,4 +1,4 @@
-export {};
+export { };
 
 /*
 阶段 4：分页和简单缓存
@@ -50,17 +50,22 @@ type PageCache<T> = {
 };
 
 function createPageCache<T>(): PageCache<T> {
+  const cache = new Map<string, PageData<T>>();
   // TODO: 实现题目 3
   return {
-    get: () => undefined,
-    set: () => undefined,
-    clear: () => undefined,
+    get: (key: string) => cache.get(key),
+    set: (key: string, value: PageData<T>) => cache.set(key, value),
+    clear: () => cache.clear(),
   };
 }
 
 function buildQueryKey(params: QueryParams): string {
   // TODO: 实现题目 4
-  return "";
+  return Object.entries(params)
+    .filter(([_, value]) => value !== undefined)
+    .sort(([keyA], [keyB]) => keyA.localeCompare(keyB))
+    .map(([key, value]) => `${key}:${value}`)
+    .join("-");
 }
 
 const cache = createPageCache<{ id: string; title: string }>();
