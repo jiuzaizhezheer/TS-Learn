@@ -1,4 +1,4 @@
-export {};
+export { };
 
 /*
 阶段 4：重试和超时
@@ -38,8 +38,20 @@ async function withTimeout<T>(
   task: () => Promise<T>,
   timeoutMs: number,
 ): Promise<T> {
-  // TODO: 实现题目 2
-  throw new Error(`TODO: ${timeoutMs}`);
+  let timerId: ReturnType<typeof setTimeout> | undefined;
+  const timeoutPromise = new Promise<never>((_, reject) => {
+    timerId = setTimeout(() => {
+      reject(new Error("timeout"));
+    }, timeoutMs);
+  });
+
+  try {
+    return await Promise.race([task(), timeoutPromise]);
+  } finally {
+    if (timerId !== undefined) {
+      clearTimeout(timerId);
+    }
+  }
 }
 
 async function retry<T>(
@@ -47,7 +59,18 @@ async function retry<T>(
   options: RetryOptions,
 ): Promise<T> {
   // TODO: 实现题目 3，可以使用 sleep
-  throw new Error(`TODO: ${options.retries}`);
+  let lastError: unknown;
+  for (let i = 0; i <= options.retries; i++) {
+    try {
+      return await withTimeout(task, options.timeoutMs);
+    } catch (error) {
+      lastError = error;
+      if (i < options.retries) {
+        await sleep(options.delayMs);
+      }
+    }
+  }
+  throw lastError;
 }
 
 let failedTimes = 0;
