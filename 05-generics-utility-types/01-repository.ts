@@ -1,4 +1,4 @@
-export {};
+export { };
 
 /*
 阶段 5：泛型仓储 Repository
@@ -38,14 +38,19 @@ type Repository<T extends Entity> = {
 
 function createMemoryRepository<T extends Entity>(): Repository<T> {
   // TODO: 实现题目 2
+  const map = new Map<string, T>();
   return {
-    findById: () => undefined,
-    findAll: () => [],
-    save: (entity) => entity,
-    remove: () => false,
-  };
+    findById: (id: string) => map.get(id),
+    findAll: () => Array.from(map.values()),
+    save: (entity) => {
+      map.set(entity.id, entity);
+      return entity;
+    },
+    remove: (id: string) => {
+      return map.delete(id);
+    }
+  }
 }
-
 type User = Entity & {
   name: string;
 };
