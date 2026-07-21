@@ -29,11 +29,13 @@ export {};
 如果你发现 render 的 value 只能推导成 T[keyof T]，尝试把 TableColumn 改造成按 key 分发的联合类型。
 */
 
-type TableColumn<T> = {
-  key: keyof T;
-  title: string;
-  render?: (value: T[keyof T], row: T) => string;
-};
+type TableColumn<T, K extends keyof T = keyof T> = K extends keyof T
+  ? {
+      key: K;
+      title: string;
+      render?: (value: T[K], row: T) => string;
+    }
+  : never;
 
 function createColumns<T>(columns: TableColumn<T>[]): TableColumn<T>[] {
   return columns;
@@ -47,7 +49,20 @@ type User = {
 };
 
 const userColumns = createColumns<User>([
-  // TODO: 实现题目 3
+  {
+    key: "name",
+    title: "姓名",
+  },
+  {
+    key: "age",
+    title: "年龄",
+    render: (value) => `${value} 岁`,
+  },
+  {
+    key: "status",
+    title: "状态",
+    render: (value) => (value === "active" ? "激活" : "禁用"),
+  },
 ]);
 
 console.log("[02-table-columns] columns:", userColumns);
