@@ -1,4 +1,4 @@
-export {};
+export { };
 
 /*
 阶段 5：常用工具类型
@@ -50,12 +50,21 @@ type ArticleDraft = Omit<Article, "published"> & {
 
 function publishArticle(article: Article): Article {
   // TODO: 实现题目 2
-  return article;
+  return {
+    ...article,
+    published: true,
+    updatedAt: new Date(),
+  };
 }
 
 function toListItem(article: Article): ArticleListItem {
   // TODO: 实现题目 3
-  throw new Error("TODO");
+  return {
+    id: article.id,
+    title: article.title,
+    authorName: article.authorName,
+    published: article.published,
+  };
 }
 
 const draftInput: CreateArticleInput = {
